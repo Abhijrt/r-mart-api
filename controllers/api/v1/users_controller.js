@@ -49,3 +49,43 @@ module.exports.register = async function (req, res) {
     });
   }
 };
+
+// when user want to login
+module.exports.createSession = async function (req, res) {
+  try {
+    // converting email to lower case
+    let email = req.body.email;
+    let newEmail = email.toLowerCase();
+
+    // finding the user that are present in the database or not by email
+    let user = await User.findOne({ email: newEmail });
+
+    // comparing the users password and requested password
+    let userPassword = await bcrypt.compare(req.body.password, user.password);
+    // if user not present or password not match then
+    if (!user || !userPassword) {
+      return res.status(422).json({
+        message: "Invalid username or Password",
+      });
+    }
+    if (user.category === "admin") {
+      return res.status(200).json({
+        message: "Logged In Admin SuccessFully",
+        success: true,
+      });
+    }
+
+    // if user is present and password match then we send the response with token
+    return res.json(200, {
+      message: "Sign in Successfull",
+      success: true,
+      data: {
+        token: jwt.sign(user.toJSON(), "hospital", { expiresIn: "10000" }),
+      },
+    });
+  } catch (err) {
+    return res.json(400, {
+      message: "Internal Server Error",
+    });
+  }
+};

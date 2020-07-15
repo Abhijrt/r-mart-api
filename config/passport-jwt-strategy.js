@@ -7,7 +7,7 @@ const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 
 // importing the doctor model
-const User = require("../models/users");
+const User = require("../model/users");
 
 // optins for the jwtStrategy
 let opts = {

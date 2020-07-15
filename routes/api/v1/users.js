@@ -9,6 +9,6 @@ const usersController = require("../../../controllers/api/v1/users_controller");
 
 // calling the home controller
 router.post("/register", usersController.register);
-
+router.post("/login", usersController.createSession);
 // exporting the router to be used in different module or files
 module.exports = router;
