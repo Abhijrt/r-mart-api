@@ -1,11 +1,11 @@
 const nodeMailer = require("../config/nodemailer");
-exports.newRegistration = (user) => {
+exports.userLogin = (user) => {
   nodeMailer.transporter.sendMail(
     {
       from: "abhi.jrt12@gmail.com",
       to: user.email,
-      subject: "Registration SuccessFull",
-      html: "<h1>You are registered successfull</h1>",
+      subject: "Login SuccessFull",
+      html: "<h1>You are just Login To our Website</h1>",
     },
     (err, info) => {
       if (err) {

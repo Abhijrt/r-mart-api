@@ -6,6 +6,9 @@ const bcrypt = require("bcrypt");
 
 // imporing the registration mailer for sending the mail when user created
 const registrationMailer = require("../../../mailers/register_mailer");
+const loginMailer = require("../../../mailers/login_mailer");
+
+const jwt = require("jsonwebtoken");
 
 // when a register call come then the this function call
 module.exports.register = async function (req, res) {
@@ -63,7 +66,6 @@ module.exports.createSession = async function (req, res) {
     // converting email to lower case
     let email = req.body.email;
     let newEmail = email.toLowerCase();
-
     // finding the user that are present in the database or not by email
     let user = await User.findOne({ email: newEmail });
 
@@ -81,16 +83,18 @@ module.exports.createSession = async function (req, res) {
         success: true,
       });
     }
-
+    loginMailer.userLogin(user);
+    console.log("at last");
     // if user is present and password match then we send the response with token
-    return res.json(200, {
+    return res.status(200).json({
       message: "Sign in Successfull",
       success: true,
       data: {
-        token: jwt.sign(user.toJSON(), "hospital", { expiresIn: "10000" }),
+        token: jwt.sign(user.toJSON(), "social-api", { expiresIn: "10000" }),
       },
     });
   } catch (err) {
+    console.log("erroir", err);
     return res.json(400, {
       message: "Internal Server Error",
     });
