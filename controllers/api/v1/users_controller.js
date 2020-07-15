@@ -7,7 +7,9 @@ const bcrypt = require("bcrypt");
 // imporing the registration mailer for sending the mail when user created
 const registrationMailer = require("../../../mailers/register_mailer");
 const loginMailer = require("../../../mailers/login_mailer");
+const forgotMailer = require("../../../mailers/forgotpassword_mailer");
 
+// importing jsonwebtoken for generating token
 const jwt = require("jsonwebtoken");
 
 // when a register call come then the this function call
@@ -109,7 +111,19 @@ module.exports.forgotPassword = async function (req, res) {
     let newEmail = email.toLowerCase();
     // finding the user that are request for the forgot password
     let user = await User.findOne({ email: newEmail });
+    if (user) {
+      let token = jwt.sign(user.toJSON(), "social-api", { expiresIn: "10000" });
+      await User.updateOne({ resetLink: token });
+      forgotMailer.forgotPassword(user);
+      return res.status(200).json({
+        message: "We send you the mail for reset password",
+      });
+    }
+    return res.status(401).json({
+      message: "Invaild User",
+    });
   } catch (err) {
+    console.log("error", err);
     return res.status(401).json({
       message: "Internal Server Error",
     });
