@@ -33,6 +33,17 @@ const usersSchema = new mongoose.Schema(
   }
 );
 
+// to remove a password from an instance
+if (!usersSchema.options.toObject) usersSchema.options.toObject = {};
+usersSchema.options.toObject.transform = function (doc, ret, options) {
+  // delete the passworc and createdAt and UpdatedAt of every document before retuning the result
+  delete ret.createdAt;
+  delete ret.updatedAt;
+  delete ret.__v;
+  delete ret._id;
+  return ret;
+};
+
 const User = mongoose.model("User", usersSchema);
 
 module.exports = User;

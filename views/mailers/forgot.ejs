@@ -5,7 +5,9 @@
   <p>Click on the link to reset your password</p>
   <br />
   <p>
-    <a href="http://localhost:8000/api/v1/forgotPassword/<%= user.resetLink %>"
+    <p><%= user.resetLink %></p>
+    <a
+      href="http://localhost:8000/api/v1/users/changepassword/<%= user.resetLink %>"
       >Reset Password</a
     >
   </p>

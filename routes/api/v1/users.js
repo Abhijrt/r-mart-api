@@ -12,6 +12,9 @@ router.post("/register", usersController.register);
 // calling the login controller
 router.post("/login", usersController.createSession);
 // calling the forgotpassword controller
-router.get("/forgotpassword", usersController.forgotPassword);
+router.post("/forgotpassword", usersController.forgotPassword);
+
+// reset url for password route
+router.post("/changepassword/:token", usersController.changePassword);
 // exporting the router to be used in different module or files
 module.exports = router;

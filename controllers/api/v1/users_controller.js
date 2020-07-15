@@ -4,6 +4,9 @@ const User = require("../../../model/users");
 // importing bcrypt for password encryption
 const bcrypt = require("bcrypt");
 
+// for generating the random token
+const crypto = require("crypto");
+
 // imporing the registration mailer for sending the mail when user created
 const registrationMailer = require("../../../mailers/register_mailer");
 const loginMailer = require("../../../mailers/login_mailer");
@@ -92,7 +95,7 @@ module.exports.createSession = async function (req, res) {
       message: "Sign in Successfull",
       success: true,
       data: {
-        token: jwt.sign(user.toJSON(), "social-api", { expiresIn: "10000" }),
+        token: jwt.sign(user.toObject(), "social-api", { expiresIn: "10000" }),
       },
     });
   } catch (err) {
@@ -111,14 +114,21 @@ module.exports.forgotPassword = async function (req, res) {
     let newEmail = email.toLowerCase();
     // finding the user that are request for the forgot password
     let user = await User.findOne({ email: newEmail });
+
+    // if user present then update rest link and send mail
     if (user) {
-      let token = jwt.sign(user.toJSON(), "social-api", { expiresIn: "10000" });
-      await User.updateOne({ resetLink: token });
+      let token = await jwt.sign(user.toObject(), "social-api", {
+        expiresIn: "10000",
+      });
+      await User.findOneAndUpdate({ email: newEmail }, { resetLink: token });
+      console.log("Token Updated", token);
+      user = await User.findOne({ email: newEmail });
       forgotMailer.forgotPassword(user);
       return res.status(200).json({
         message: "We send you the mail for reset password",
       });
     }
+    // if not present user then send message
     return res.status(401).json({
       message: "Invaild User",
     });
@@ -128,4 +138,31 @@ module.exports.forgotPassword = async function (req, res) {
       message: "Internal Server Error",
     });
   }
+};
+
+// when a password reset for the user then this call
+module.exports.changePassword = async function (req, res) {
+  let token = req.params.token;
+  console.log(token);
+  let user = User.findOne({ resetLink: token });
+  if (user) {
+    if (req.body.password !== req.body.confirm_password) {
+      return res.status(400).json({
+        message: "Password And Confirm password must be same",
+      });
+    }
+    let password = req.body.password;
+    let newPassword = await bcrypt.hash(password, 10);
+    await User.findOneAndUpdate(
+      { resetLink: token },
+      { password: newPassword }
+    );
+    console.log(newPassword);
+    return res.status(200).json({
+      message: "Rest Password SuccessFulyy",
+    });
+  }
+  return res.status(400).json({
+    message: "Wrong Email",
+  });
 };
