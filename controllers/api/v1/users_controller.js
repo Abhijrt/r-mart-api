@@ -30,6 +30,7 @@ module.exports.register = async function (req, res) {
         phone: req.body.phone,
         name: req.body.name,
         password: newPassword,
+        category: "user",
       });
       return res.status(200).json({
         message: "User Registered SuccessFully",
