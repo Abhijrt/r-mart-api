@@ -1,0 +1,38 @@
+// importing node mailer
+const nodemailer = require("nodemailer");
+// importing path
+const path = require("path");
+
+// importing the ejs
+const ejs = require("ejs");
+
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "",
+    pass: "",
+  },
+});
+
+let renderTemplate = (data, relativepath) => {
+  let mailHTML;
+  ejs.renderFile(
+    path.join(__dirname, "./views/mailers/relativepath"),
+    function (err, template) {
+      if (err) {
+        console.log("Error in rendering the HTML");
+        return;
+      }
+      mailHTML = template;
+    }
+  );
+  return mailHTML;
+};
+
+module.exports = {
+  transporter: transporter,
+  renderTemplate: renderTemplate,
+};

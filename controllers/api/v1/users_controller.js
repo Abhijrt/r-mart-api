@@ -1,6 +1,11 @@
 // importing the user model
 const User = require("../../../model/users");
+
+// importing bcrypt for password encryption
 const bcrypt = require("bcrypt");
+
+// imporing the registration mailer for sending the mail when user created
+const registrationMailer = require("../../../mailers/register_mailer");
 
 // when a register call come then the this function call
 module.exports.register = async function (req, res) {
@@ -25,13 +30,15 @@ module.exports.register = async function (req, res) {
 
     //   if user not present then create a new user
     if (!user) {
-      User.create({
+      user = await User.create({
         email: newEmail,
         phone: req.body.phone,
         name: req.body.name,
         password: newPassword,
         category: "user",
       });
+      // calling the new registration mailer for sending the mail
+      registrationMailer.newRegistration(user);
       return res.status(200).json({
         message: "User Registered SuccessFully",
         success: true,
@@ -85,6 +92,21 @@ module.exports.createSession = async function (req, res) {
     });
   } catch (err) {
     return res.json(400, {
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// when forgot password link call then this function call
+module.exports.forgotPassword = async function (req, res) {
+  try {
+    // converting email to lower case
+    let email = req.body.email;
+    let newEmail = email.toLowerCase();
+    // finding the user that are request for the forgot password
+    let user = await User.findOne({ email: newEmail });
+  } catch (err) {
+    return res.status(401).json({
       message: "Internal Server Error",
     });
   }
