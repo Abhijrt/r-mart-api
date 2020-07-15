@@ -5,10 +5,10 @@ const express = require("express");
 const router = express.Router();
 
 // fetching the home controller
-const usersController = require("../../../controllers/api/v1/users_controller");
+const adminController = require("../../../controllers/api/v1/admin_controller");
 
 // calling the home controller
-router.post("/register", usersController.register);
+router.post("/register", adminController.register);
 
 // exporting the router to be used in different module or files
 module.exports = router;

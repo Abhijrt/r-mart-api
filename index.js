@@ -13,6 +13,9 @@ const db = require("./config/mongoose");
 // tell the server to use the assets
 app.use(express.static("./assets"));
 
+// for using the request for taking the inputs
+app.use(express.urlencoded());
+
 // tell the app to use the router
 app.use("/", require("./routes"));
 
