@@ -12,6 +12,10 @@ const registrationMailer = require("../../../mailers/register_mailer");
 const loginMailer = require("../../../mailers/login_mailer");
 const forgotMailer = require("../../../mailers/forgotpassword_mailer");
 
+// Email worker for call the email
+const registerEmailWorker = require("../../../workers/register_worker");
+const queue = require("../../../config/kue");
+
 // importing jsonwebtoken for generating token
 const jwt = require("jsonwebtoken");
 
@@ -46,7 +50,14 @@ module.exports.register = async function (req, res) {
         category: "user",
       });
       // calling the new registration mailer for sending the mail
-      registrationMailer.newRegistration(user);
+      // registrationMailer.newRegistration(user);
+      let job = queue.create("register", user).save(function (err) {
+        if (err) {
+          console.log("Error in creating the job queue");
+          return;
+        }
+        console.log("job enqueued", job.id);
+      });
       return res.status(200).json({
         message: "User Registered SuccessFully",
         success: true,
