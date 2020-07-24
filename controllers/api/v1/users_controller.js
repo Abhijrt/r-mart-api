@@ -122,6 +122,7 @@ module.exports.createSession = async function (req, res) {
   }
 };
 
+// showing the user profile
 module.exports.profile = async function (req, res) {
   try {
     return res.status(200).json({
@@ -135,4 +136,29 @@ module.exports.profile = async function (req, res) {
   }
 };
 
-module.exports.update = function (req, res) {};
+// updating the user profile
+module.exports.update = async function (req, res) {
+  try {
+    console.log("In");
+    // converting email to lower case
+    let email = req.body.email;
+    let newEmail = email.toLowerCase();
+    // password convert in encrypted form
+    let password = req.body.password;
+    let newPassword = await bcrypt.hash(password, 10);
+    await User.findByIdAndUpdate(req.user.id, {
+      email: newEmail,
+      name: req.body.name,
+      password: newPassword,
+      category: "user",
+    });
+    return res.status(200).json({
+      message: "Profile Upadated Successfully",
+      success: true,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on Updating the Profile",
+    });
+  }
+};
