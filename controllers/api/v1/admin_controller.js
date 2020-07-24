@@ -56,17 +56,19 @@ module.exports.register = async function (req, res) {
 // when a admin add the product then this function will call
 module.exports.addProduct = async function (req, res) {
   try {
-    console.log("Req", req.body);
+    // finding the product if already present
     let product = await Product.findOne({
       product_name: req.body.product_name,
     });
+
+    // if present then send message
     if (product) {
       return res.status(200).json({
         message: "Product Already In Stock",
         success: true,
       });
     }
-    console.log("adding.....");
+    // if already not present then add the product
     Product.create({
       product_name: req.body.product_name,
       stock_quantity: req.body.stock_quantity,
@@ -77,6 +79,7 @@ module.exports.addProduct = async function (req, res) {
       sold_by: req.body.sold_by,
       product_image: "Added",
     });
+    // sending the message
     return res.status(200).json({
       message: "Product Added",
       success: true,
@@ -92,6 +95,7 @@ module.exports.addProduct = async function (req, res) {
 // when admin update any quantity
 module.exports.updateProducts = async function (req, res) {
   try {
+    // finding the product and updating
     await Product.findOneAndUpdate(
       { product_name: req.body.product_name },
       {
