@@ -1,5 +1,8 @@
 // importing the user model
 const User = require("../../../model/users");
+// importing the Product Model for adding the product
+const Product = require("../../../model/stock");
+// importing the bcrypt for password encrypted
 const bcrypt = require("bcrypt");
 
 // when a register call come then the this function call
@@ -46,6 +49,42 @@ module.exports.register = async function (req, res) {
   } catch (err) {
     return res.status(404).json({
       message: "Internal Server Error",
+    });
+  }
+};
+
+// when a admin add the product then this function will call
+module.exports.addProduct = async function (req, res) {
+  try {
+    console.log("Req", req.body);
+    let product = await Product.findOne({
+      product_name: req.body.product_name,
+    });
+    if (product) {
+      return res.status(200).json({
+        message: "Product Already In Stock",
+        success: true,
+      });
+    }
+    console.log("adding.....");
+    Product.create({
+      product_name: req.body.product_name,
+      stock_quantity: req.body.stock_quantity,
+      selling_price: req.body.selling_price,
+      marked_price: req.body.marked_price,
+      description: req.body.description,
+      category: req.body.category,
+      sold_by: req.body.sold_by,
+      product_image: "hii",
+    });
+    return res.status(200).json({
+      message: "Product Added",
+      success: true,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      message: "Internal Server Error On adding Products",
+      success: false,
     });
   }
 };

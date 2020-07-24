@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    solg_by: {
+    sold_by: {
       type: String,
       required: true,
     },
@@ -47,7 +47,6 @@ productSchema.options.toObject.transform = function (doc, ret, options) {
   delete ret.createdAt;
   delete ret.updatedAt;
   delete ret.__v;
-  delete ret._id;
   return ret;
 };
 
