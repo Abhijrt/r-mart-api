@@ -6,22 +6,17 @@ const router = express.Router();
 
 // fetching the home controller
 const adminController = require("../../../controllers/api/v1/admin_controller");
+const productController = require("../../../controllers/api/v1/product_controller");
 const passport = require("passport");
 
 // calling the home controller
-router.post(
-  "/register",
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  adminController.register
-);
+router.post("/register", adminController.register);
 router.post(
   "/addProducts",
   passport.authenticate("jwt", {
     session: false,
   }),
-  adminController.addProduct
+  productController.addProduct
 );
 router.post(
   "/updateProducts",

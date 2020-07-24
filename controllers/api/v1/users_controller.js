@@ -98,8 +98,8 @@ module.exports.createSession = async function (req, res) {
         message: "Logged In Admin SuccessFully",
         success: true,
         data: {
-          token: jwt.sign(user.toObject(), "social-api", {
-            expiresIn: "10000",
+          token: jwt.sign(user.toJSON(), "social-api", {
+            expiresIn: "100000",
           }),
         },
       });
@@ -111,7 +111,9 @@ module.exports.createSession = async function (req, res) {
       message: "Sign in Successfull",
       success: true,
       data: {
-        token: jwt.sign(user.toObject(), "social-api", { expiresIn: "10000" }),
+        token: jwt.sign(user.toObject(), "social-api", {
+          expiresIn: "100000",
+        }),
       },
     });
   } catch (err) {
@@ -159,7 +161,6 @@ module.exports.forgotPassword = async function (req, res) {
 // when a password reset for the user then this call
 module.exports.changePassword = async function (req, res) {
   let token = req.params.token;
-  console.log(token);
   let user = User.findOne({ resetLink: token });
   if (user) {
     if (req.body.password !== req.body.confirm_password) {

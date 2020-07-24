@@ -17,7 +17,6 @@ app.use(express.static("./assets"));
 app.use(express.urlencoded());
 
 // tell the server to use jwt strategy
-
 const passportJWT = require("./config/passport-jwt-strategy");
 
 // tell the app to use the router
