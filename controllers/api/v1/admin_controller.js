@@ -30,7 +30,6 @@ module.exports.register = async function (req, res) {
     if (!user) {
       let user = await User.create({
         email: newEmail,
-        phone: req.body.phone,
         name: req.body.name,
         password: newPassword,
         category: "admin",

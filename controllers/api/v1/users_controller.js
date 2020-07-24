@@ -43,7 +43,6 @@ module.exports.register = async function (req, res) {
     if (!user) {
       user = await User.create({
         email: newEmail,
-        phone: req.body.phone,
         name: req.body.name,
         password: newPassword,
         category: "user",
@@ -123,6 +122,17 @@ module.exports.createSession = async function (req, res) {
   }
 };
 
-module.exports.profile = function (req, res) {};
+module.exports.profile = async function (req, res) {
+  try {
+    return res.status(200).json({
+      message: "User Details",
+      user: req.user.toObject(),
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on Showing the Profile",
+    });
+  }
+};
 
 module.exports.update = function (req, res) {};
