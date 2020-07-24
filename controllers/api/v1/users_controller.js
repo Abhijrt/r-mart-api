@@ -97,6 +97,11 @@ module.exports.createSession = async function (req, res) {
       return res.status(200).json({
         message: "Logged In Admin SuccessFully",
         success: true,
+        data: {
+          token: jwt.sign(user.toObject(), "social-api", {
+            expiresIn: "10000",
+          }),
+        },
       });
     }
     loginMailer.userLogin(user);
