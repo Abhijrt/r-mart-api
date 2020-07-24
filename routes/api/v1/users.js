@@ -11,10 +11,11 @@ const usersController = require("../../../controllers/api/v1/users_controller");
 router.post("/register", usersController.register);
 // calling the login controller
 router.post("/login", usersController.createSession);
-// calling the forgotpassword controller
-router.post("/forgotpassword", usersController.forgotPassword);
 
-// reset url for password route
-router.post("/changepassword/:token", usersController.changePassword);
+// show user profile
+router.post("/profile", usersController.profile);
+
+// update user profile
+router.post("/update", usersController.update);
 // exporting the router to be used in different module or files
 module.exports = router;

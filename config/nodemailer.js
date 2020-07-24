@@ -5,7 +5,6 @@ const path = require("path");
 
 // importing the ejs
 const ejs = require("ejs");
-const { realpath } = require("fs");
 
 // creating reusable transporter object using the default SMPT transporter
 let transporter = nodemailer.createTransport({
@@ -15,7 +14,7 @@ let transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "abhi.jrt12@gmail.com",
-    pass: "",
+    pass: "abhirlajj",
   },
 });
 
