@@ -6,7 +6,6 @@ const router = express.Router();
 
 // fetching the home controller
 const adminController = require("../../../controllers/api/v1/admin_controller");
-const passport = require("passport");
 
 // calling the register controller
 router.post("/register", adminController.register);

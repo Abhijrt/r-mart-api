@@ -91,3 +91,21 @@ module.exports.deleteProduct = async function (req, res) {
     });
   }
 };
+
+module.exports.productDetails = async function (req, res) {
+  try {
+    let productId = req.params.product_id;
+    let product = await Product.findById(productId);
+    if (product) {
+      return res.status(200).json({
+        message: "Product Details",
+        success: true,
+        product: product.toObject(),
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on Fetching the product Details",
+    });
+  }
+};

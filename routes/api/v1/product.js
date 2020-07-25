@@ -30,5 +30,11 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   productController.deleteProduct
 );
+
+router.get(
+  "/product_detail/:product_id",
+  passport.authenticate("jwt", { session: false }),
+  productController.productDetails
+);
 // exporting the router to be used in different module or files
 module.exports = router;
