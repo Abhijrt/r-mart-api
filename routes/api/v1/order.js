@@ -15,5 +15,11 @@ router.post(
   orderController.placeOrder
 );
 
+router.get(
+  "/orderDetail/:order_id",
+  passport.authenticate("jwt", { session: false }),
+  orderController.orderDetail
+);
+
 // exporting the router to be used in different module or files
 module.exports = router;

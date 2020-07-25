@@ -4,19 +4,6 @@ const Order = require("../../../model/order");
 // when a user place order
 module.exports.placeOrder = async function (req, res) {
   try {
-    // console.log("Hii");
-    // console.log(req.body);
-    // console.log(Date.now());
-    // console.log(req.body.order_id);
-    // console.log(req.body.products);
-    // console.log(req.body.total_amount);
-    // console.log(req.body.payment_mode);
-    // console.log(req.body.order_status);
-    // console.log(req.body.address);
-    // console.log(req.body.mobile_no);
-    // console.log(req.body.city);
-    // console.log(req.body.pincode);
-    // console.log(req.body.shipping_cost);
     let order = await Order.create({
       user: req.user.id,
       order_id: Date.now(),
@@ -44,3 +31,28 @@ module.exports.placeOrder = async function (req, res) {
     });
   }
 };
+
+// when a perticular order details find
+module.exports.orderDetail = async function (req, res) {
+  try {
+    let orderId = req.params.order_id;
+    let order = await Order.findById(orderId);
+    if (order) {
+      return res.status(200).json({
+        message: "Order Details",
+        success: true,
+        order: order.toObject(),
+      });
+    }
+    return res.status(400).json({
+      message: "Invalid Order Id",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on fetching the order Details",
+    });
+  }
+};
+
+// when a all order find
+module.exports.getAllOrder = function (req, res) {};
