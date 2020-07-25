@@ -15,10 +15,18 @@ router.post(
   orderController.placeOrder
 );
 
+// when perticular order details route come
 router.get(
   "/orderDetail/:order_id",
   passport.authenticate("jwt", { session: false }),
   orderController.orderDetail
+);
+
+// when all order detail route come
+router.get(
+  "/get_all_order",
+  passport.authenticate("jwt", { session: false }),
+  orderController.getAllOrder
 );
 
 // exporting the router to be used in different module or files

@@ -55,4 +55,31 @@ module.exports.orderDetail = async function (req, res) {
 };
 
 // when a all order find
-module.exports.getAllOrder = function (req, res) {};
+module.exports.getAllOrder = async function (req, res) {
+  try {
+    let orders = await Order.find({ user: req.user._id });
+    console.log(orders);
+    // if order present thensend order and message
+    if (orders) {
+      // creating the new Array
+      let newOrders = new Array(orders.length);
+      // calling the to object method
+      for (let i of orders) {
+        newOrders.push(i.toObject());
+      }
+      return res.status(200).json({
+        message: "ALL Order Details",
+        success: true,
+        orders: newOrders,
+      });
+    }
+    // if user dont have any order
+    return res.status(404).json({
+      message: "You dont Have Any Order",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on Fetching order Details",
+    });
+  }
+};
