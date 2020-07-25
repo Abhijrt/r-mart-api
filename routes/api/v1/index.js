@@ -22,5 +22,8 @@ router.post("/changepassword/:token", forgotPasswordController.changePassword);
 // when a admin route come then this route use
 router.use("/admin", require("./admin"));
 
+// when a oder route come
+router.use("/order", require("./order"));
+
 // exporting the router to be used in different module or files
 module.exports = router;

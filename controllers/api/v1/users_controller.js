@@ -109,7 +109,7 @@ module.exports.createSession = async function (req, res) {
       message: "Sign in Successfull",
       success: true,
       data: {
-        token: jwt.sign(user.toObject(), "social-api", {
+        token: jwt.sign(user.toJSON(), "social-api", {
           expiresIn: "100000",
         }),
       },
