@@ -21,6 +21,8 @@ router.post("/changepassword/:token", forgotPasswordController.changePassword);
 
 // when a admin route come then this route use
 router.use("/admin", require("./admin"));
+// when product route come
+router.use("/product", require("./product"));
 
 // when a oder route come
 router.use("/order", require("./order"));
