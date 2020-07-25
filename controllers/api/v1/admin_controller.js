@@ -118,3 +118,27 @@ module.exports.updateProducts = async function (req, res) {
     });
   }
 };
+
+// when we want to delete the Product
+module.exports.deleteProduct = async function (req, res) {
+  try {
+    let productId = req.params.product_id;
+    // checking that product is present or not
+    let product = await Product.findById(productId);
+    console.log("Hii");
+    if (product) {
+      // finding the product and deleting
+      await Product.findByIdAndDelete(productId);
+      return res.status(200).json({
+        message: "Product Deleted SuccessFully",
+      });
+    }
+    return res.status(200).json({
+      message: "Product is not in the List",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on deleteing the product",
+    });
+  }
+};
