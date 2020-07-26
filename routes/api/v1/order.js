@@ -29,5 +29,12 @@ router.get(
   orderController.getAllOrder
 );
 
+// when a order delete controller come
+router.get(
+  "/delete_order/:order_id",
+  passport.authenticate("jwt", { session: false }),
+  orderController.deleteOrder
+);
+
 // exporting the router to be used in different module or files
 module.exports = router;

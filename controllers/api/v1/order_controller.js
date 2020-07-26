@@ -58,7 +58,6 @@ module.exports.orderDetail = async function (req, res) {
 module.exports.getAllOrder = async function (req, res) {
   try {
     let orders = await Order.find({ user: req.user._id });
-    console.log(orders);
     // if order present thensend order and message
     if (orders) {
       // creating the new Array
@@ -80,6 +79,32 @@ module.exports.getAllOrder = async function (req, res) {
   } catch (err) {
     return res.status(500).json({
       message: "Internal Server Error on Fetching order Details",
+    });
+  }
+};
+
+module.exports.deleteOrder = async function (req, res) {
+  try {
+    let orderId = req.params.order_id;
+    let order = await Order.findById(orderId);
+    if (order) {
+      if (order.order_status === "pending") {
+        await Order.findByIdAndDelete(orderId);
+        return res.status(200).json({
+          message: "Order Cancelled Successfully",
+          success: true,
+        });
+      }
+      return res.status(401).json({
+        message: "You can not delete this Order ",
+      });
+    }
+    return res.status(404).json({
+      message: "This order id is not valid",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error on deleting the order",
     });
   }
 };
