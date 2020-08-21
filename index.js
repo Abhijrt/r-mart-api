@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 // Giving the port number on which the server run
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 // take the server as a app
 const app = express();
