@@ -1,3 +1,7 @@
+const fs = require("fs");
+const rfs = require("rotating-file-stream");
+const path = require("path");
+
 const development = {
   name: "development",
 };
@@ -6,3 +10,6 @@ const production = {
   redisURL:
     "redis://h:pef5f83fd553d0f1bd8d5f9b4de3e08a0255565eff7381b02310709471b53ca3e@ec2-54-198-31-23.compute-1.amazonaws.com:9189",
 };
+
+// for production mode or a developement
+module.exports = eval(production == undefined) ? development : eval(production);
