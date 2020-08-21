@@ -1,6 +1,8 @@
 // importing the express server
 const express = require("express");
 const bodyParser = require("body-parser");
+
+const env = require("./config/environment");
 // Giving the port number on which the server run
 const port = process.env.PORT || 8000;
 
